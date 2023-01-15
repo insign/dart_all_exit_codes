@@ -3,4 +3,4 @@
 /// More dartdocs go here.
 library all_exit_codes;
 
-export 'src/exit_codes_base.dart';
+export 'src/all_exit_codes_consts.dart';

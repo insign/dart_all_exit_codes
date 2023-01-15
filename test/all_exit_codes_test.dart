@@ -1,4 +1,4 @@
-import 'package:all_exit_codes/exit_codes.dart';
+import 'package:all_exit_codes/all_exit_codes.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -8,7 +8,7 @@ void main() {
     });
 
     test('Check some codes', () {
-      expect(ExitCode.wrongUsage.code, 64);
+      expect(wrongUsage, 64);
     });
   });
 }
