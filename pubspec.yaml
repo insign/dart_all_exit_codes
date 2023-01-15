@@ -1,0 +1,14 @@
+name: exit_codes
+description: Just terminal exit codes with more description to use in dart
+version: 1.0.0
+repository: https://github.com/insign/dart_exit_codes
+
+environment:
+  sdk: '>=2.19.0-444.0.dev <3.0.0'
+
+# dependencies:
+#   path: ^1.8.0
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.21.0
