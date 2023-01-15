@@ -1,4 +1,4 @@
-import 'package:exit_codes/exit_codes.dart';
+import 'package:all_exit_codes/exit_codes.dart';
 import 'package:test/test.dart';
 
 void main() {

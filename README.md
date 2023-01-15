@@ -3,16 +3,12 @@ Just terminal exit codes with more description to use in dart
 ## Getting started
 
 ```dart
-dart pub add exit_codes
+dart pub add all_exit_codes
 ```
-
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
 ```dart
-import 'package:exit_codes/exit_codes.dart';
+import 'package:all_exit_codes/all_exit_codes.dart';
 
 Never main() {
   print('Maybe you are using this command wrong. Check the usage.');
