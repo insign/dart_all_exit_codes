@@ -1,3 +1,5 @@
+## v2.1.1
+- pub upgrade
 ## 2.1.0 - 2023-01-15
 - removed duplicated codes from exit codes consts
 ## 2.0.1 - 2023-01-15
