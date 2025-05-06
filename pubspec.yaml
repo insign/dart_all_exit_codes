@@ -1,6 +1,6 @@
 name: all_exit_codes
 description: Just terminal exit codes with more description to use in dart
-version: 2.1.1
+version: 2.1.2
 repository: https://github.com/insign/dart_all_exit_codes
 homepage: https://github.com/insign/dart_all_exit_codes
 
