@@ -1,3 +1,5 @@
+## v2.1.4
+- updated dependencies
 ## v2.1.3
 - pub upgrade after years
 ## v2.1.1
