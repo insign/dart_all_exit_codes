@@ -1,11 +1,11 @@
 name: all_exit_codes
 description: Just terminal exit codes with more description to use in dart
-version: 2.1.3
+version: 2.1.4
 repository: https://github.com/insign/dart_all_exit_codes
 homepage: https://github.com/insign/dart_all_exit_codes
 
 environment:
-  sdk: '>=2.17.0 <3.8.0'
+  sdk: ">=2.17.0 <4.0.0"
 
 platforms:
   linux:
