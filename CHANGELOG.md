@@ -1,3 +1,5 @@
+## v2.2.0
+- release
 ## v2.1.5
 - updated `lints` dependency to `^6.0.0` to be compatible with the most recent Dart stable version
 ## v2.1.4
