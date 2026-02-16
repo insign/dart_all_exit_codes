@@ -10,5 +10,13 @@ void main() {
     test('Check some codes', () {
       expect(wrongUsage, 64);
     });
+
+    test('Check exitCodeDescriptions map', () {
+      expect(exitCodeDescriptions[success], 'The operation was successful.');
+      expect(exitCodeDescriptions[wrongUsage],
+          'The command line usage is incorrect.');
+      expect(exitCodeDescriptions[ioError], 'An input/output error occurred.');
+      expect(exitCodeDescriptions.length, 19);
+    });
   });
 }

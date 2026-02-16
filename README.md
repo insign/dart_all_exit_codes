@@ -16,6 +16,17 @@ Never main() {
 }
 ```
 
+You can also access the description of the exit codes:
+
+```dart
+import 'package:all_exit_codes/all_exit_codes.dart';
+
+void main() {
+  int code = wrongUsage;
+  print('Exit code $code: ${exitCodeDescriptions[code]}');
+}
+```
+
 ## LICENSE
 
 [BSD 3-Clause License](./LICENSE)

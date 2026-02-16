@@ -4,3 +4,4 @@
 library;
 
 export 'src/all_exit_codes_consts.dart';
+export 'src/all_exit_codes_map.dart';
