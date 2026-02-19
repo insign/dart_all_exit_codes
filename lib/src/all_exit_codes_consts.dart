@@ -54,3 +54,26 @@ const int userTerminated = 130;
 
 /// 255 - Unknown - An unknown exit status occurred.
 const int unknown = 255;
+
+/// Map of exit codes to their descriptions.
+const Map<int, String> exitCodeDescriptions = {
+  success: 'Success - The operation was successful.',
+  generalError: 'GeneralError - An error that occurred during the operation.',
+  misuseOfShellBuiltins: 'MisuseOfShellBuiltins - The command line usage is incorrect.',
+  notADirectory: 'NotADirectory - The specified path is not a directory.',
+  wrongUsage: 'WrongUsage - The command line usage is incorrect.',
+  unableToOpenInputFile: 'UnableToOpenInputFile - The specified input file could not be opened.',
+  fileExists: 'FileExists - The specified file already exists.',
+  unableToCreateTemporaryFile: 'UnableToCreateTemporaryFile - A temporary file could not be created.',
+  unableToOpenOutputFile: 'UnableToOpenOutputFile - The specified output file could not be opened.',
+  unableToOpenOutputFileForWriting: 'UnableToOpenOutputFileForWriting - The specified output file could not be opened for writing.',
+  unableToOpenOutputFileForReading: 'UnableToOpenOutputFileForReading - The specified output file could not be opened for reading.',
+  ioError: 'IOError - An input/output error occurred.',
+  tryAgain: 'TryAgain - A temporary failure occurred, try again later.',
+  configurationError: 'ConfigurationError - A configuration error occurred.',
+  cantExecute: 'CantExecute - The command invoked cannot execute.',
+  notFound: 'NotFound - The command was not found.',
+  invalidArgumentToExit: 'InvalidArgumentToExit - An invalid argument was passed to the exit command.',
+  userTerminated: 'UserTerminated - The script was terminated by the user.',
+  unknown: 'Unknown - An unknown exit status occurred.',
+};

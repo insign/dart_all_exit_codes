@@ -10,5 +10,15 @@ void main() {
     test('Check some codes', () {
       expect(wrongUsage, 64);
     });
+
+    test('Check descriptions map', () {
+      expect(exitCodeDescriptions[success],
+          'Success - The operation was successful.');
+      expect(exitCodeDescriptions[wrongUsage],
+          'WrongUsage - The command line usage is incorrect.');
+      expect(exitCodeDescriptions[unknown],
+          'Unknown - An unknown exit status occurred.');
+      expect(exitCodeDescriptions.length, 19);
+    });
   });
 }
