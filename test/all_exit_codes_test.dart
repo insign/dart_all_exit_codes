@@ -10,5 +10,13 @@ void main() {
     test('Check some codes', () {
       expect(wrongUsage, 64);
     });
+
+    test('Check new BSD codes', () {
+      expect(dataError, 65);
+      expect(noUser, 67);
+      expect(noHost, 68);
+      expect(protocolError, 76);
+      expect(noPermission, 77);
+    });
   });
 }

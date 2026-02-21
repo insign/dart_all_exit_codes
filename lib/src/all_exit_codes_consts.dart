@@ -13,8 +13,17 @@ const int notADirectory = 20;
 /// 64 - WrongUsage - The command line usage is incorrect.
 const int wrongUsage = 64;
 
+/// 65 - DataError - The input data was incorrect in some way.
+const int dataError = 65;
+
 /// 66 - UnableToOpenInputFile - The specified input file could not be opened.
 const int unableToOpenInputFile = 66;
+
+/// 67 - NoUser - The user specified did not exist.
+const int noUser = 67;
+
+/// 68 - NoHost - The host specified did not exist.
+const int noHost = 68;
 
 /// 72 - FileExists - The specified file already exists.
 const int fileExists = 72;
@@ -36,6 +45,12 @@ const int ioError = 74;
 
 /// 75 - TryAgain - A temporary failure occurred, try again later.
 const int tryAgain = 75;
+
+/// 76 - ProtocolError - The remote system returned something that was "not possible" during a protocol exchange.
+const int protocolError = 76;
+
+/// 77 - NoPermission - You did not have sufficient permission to perform the operation.
+const int noPermission = 77;
 
 /// 78 - ConfigurationError - A configuration error occurred.
 const int configurationError = 78;
