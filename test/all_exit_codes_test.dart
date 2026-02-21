@@ -11,12 +11,22 @@ void main() {
       expect(wrongUsage, 64);
     });
 
-    test('Check new BSD codes', () {
+    test('Check BSD exit codes', () {
       expect(dataError, 65);
       expect(noUser, 67);
       expect(noHost, 68);
       expect(protocolError, 76);
       expect(noPermission, 77);
+    });
+
+    test('Check exitCodeDescriptions map', () {
+      expect(exitCodeDescriptions, isA<Map<int, String>>());
+      expect(exitCodeDescriptions[success], 'Success');
+      expect(exitCodeDescriptions[generalError], 'GeneralError');
+      expect(exitCodeDescriptions[wrongUsage], 'WrongUsage');
+      expect(exitCodeDescriptions[dataError], 'DataError');
+      expect(exitCodeDescriptions[noUser], 'NoUser');
+      expect(exitCodeDescriptions.length, 24);
     });
   });
 }
