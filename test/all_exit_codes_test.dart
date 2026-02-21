@@ -10,5 +10,13 @@ void main() {
     test('Check some codes', () {
       expect(wrongUsage, 64);
     });
+
+    test('Check exitCodeDescriptions map', () {
+      expect(exitCodeDescriptions, isA<Map<int, String>>());
+      expect(exitCodeDescriptions[success], 'Success');
+      expect(exitCodeDescriptions[generalError], 'GeneralError');
+      expect(exitCodeDescriptions[wrongUsage], 'WrongUsage');
+      expect(exitCodeDescriptions.length, 19);
+    });
   });
 }

@@ -54,3 +54,26 @@ const int userTerminated = 130;
 
 /// 255 - Unknown - An unknown exit status occurred.
 const int unknown = 255;
+
+/// Map of exit codes to their descriptions.
+const Map<int, String> exitCodeDescriptions = {
+  success: 'Success',
+  generalError: 'GeneralError',
+  misuseOfShellBuiltins: 'MisuseOfShellBuiltins',
+  notADirectory: 'NotADirectory',
+  wrongUsage: 'WrongUsage',
+  unableToOpenInputFile: 'UnableToOpenInputFile',
+  fileExists: 'FileExists',
+  unableToCreateTemporaryFile: 'UnableToCreateTemporaryFile',
+  unableToOpenOutputFile: 'UnableToOpenOutputFile',
+  unableToOpenOutputFileForWriting: 'UnableToOpenOutputFileForWriting',
+  unableToOpenOutputFileForReading: 'UnableToOpenOutputFileForReading',
+  ioError: 'IOError',
+  tryAgain: 'TryAgain',
+  configurationError: 'ConfigurationError',
+  cantExecute: 'CantExecute',
+  notFound: 'NotFound',
+  invalidArgumentToExit: 'InvalidArgumentToExit',
+  userTerminated: 'UserTerminated',
+  unknown: 'Unknown',
+};
