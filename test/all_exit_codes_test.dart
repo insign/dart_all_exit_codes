@@ -21,11 +21,11 @@ void main() {
 
     test('Check exitCodeDescriptions map', () {
       expect(exitCodeDescriptions, isA<Map<int, String>>());
-      expect(exitCodeDescriptions[success], 'Success');
-      expect(exitCodeDescriptions[generalError], 'GeneralError');
-      expect(exitCodeDescriptions[wrongUsage], 'WrongUsage');
-      expect(exitCodeDescriptions[dataError], 'DataError');
-      expect(exitCodeDescriptions[noUser], 'NoUser');
+      expect(exitCodeDescriptions[success], 'The operation was successful.');
+      expect(exitCodeDescriptions[generalError], 'An error that occurred during the operation.');
+      expect(exitCodeDescriptions[wrongUsage], 'The command line usage is incorrect.');
+      expect(exitCodeDescriptions[dataError], 'The input data was incorrect in some way.');
+      expect(exitCodeDescriptions[noUser], 'The user specified did not exist.');
       expect(exitCodeDescriptions.length, 24);
     });
   });
