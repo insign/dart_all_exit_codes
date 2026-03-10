@@ -28,5 +28,12 @@ void main() {
       expect(exitCodeDescriptions[noUser], 'The user specified did not exist.');
       expect(exitCodeDescriptions.length, 24);
     });
+
+    test('Check exitDescription extension on int', () {
+      expect(success.exitDescription, 'The operation was successful.');
+      expect(wrongUsage.exitDescription, 'The command line usage is incorrect.');
+      expect(unknown.exitDescription, 'An unknown exit status occurred.');
+      expect(999.exitDescription, 'An unknown exit status occurred.');
+    });
   });
 }
