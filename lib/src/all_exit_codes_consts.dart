@@ -97,3 +97,12 @@ const Map<int, String> exitCodeDescriptions = {
   userTerminated: 'The script was terminated by the user.',
   unknown: 'An unknown exit status occurred.',
 };
+
+/// Extension on [int] to easily access the human-readable description of an exit code.
+extension ExitCodeExtension on int {
+  /// Returns the human-readable description of this exit code.
+  /// If the exit code is not found in [exitCodeDescriptions], it returns
+  /// the description for [unknown].
+  String get exitDescription =>
+      exitCodeDescriptions[this] ?? exitCodeDescriptions[unknown]!;
+}
