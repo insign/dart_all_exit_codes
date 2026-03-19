@@ -84,12 +84,16 @@ const Map<int, String> exitCodeDescriptions = {
   fileExists: 'The specified file already exists.',
   unableToCreateTemporaryFile: 'A temporary file could not be created.',
   unableToOpenOutputFile: 'The specified output file could not be opened.',
-  unableToOpenOutputFileForWriting: 'The specified output file could not be opened for writing.',
-  unableToOpenOutputFileForReading: 'The specified output file could not be opened for reading.',
+  unableToOpenOutputFileForWriting:
+      'The specified output file could not be opened for writing.',
+  unableToOpenOutputFileForReading:
+      'The specified output file could not be opened for reading.',
   ioError: 'An input/output error occurred.',
   tryAgain: 'A temporary failure occurred, try again later.',
-  protocolError: 'The remote system returned something that was "not possible" during a protocol exchange.',
-  noPermission: 'You did not have sufficient permission to perform the operation.',
+  protocolError:
+      'The remote system returned something that was "not possible" during a protocol exchange.',
+  noPermission:
+      'You did not have sufficient permission to perform the operation.',
   configurationError: 'A configuration error occurred.',
   cantExecute: 'The command invoked cannot execute.',
   notFound: 'The command was not found.',
@@ -97,3 +101,8 @@ const Map<int, String> exitCodeDescriptions = {
   userTerminated: 'The script was terminated by the user.',
   unknown: 'An unknown exit status occurred.',
 };
+
+extension ExitCodeExtension on int {
+  String get exitDescription =>
+      exitCodeDescriptions[this] ?? 'Unknown exit code: $this';
+}
