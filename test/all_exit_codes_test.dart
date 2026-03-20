@@ -40,10 +40,14 @@ void main() {
 
     test('Check ExitCodeExtension', () {
       expect(success.exitDescription, 'The operation was successful.');
+      expect(success.isSuccess, isTrue);
+      expect(success.isError, isFalse);
       expect(
         generalError.exitDescription,
         'An error that occurred during the operation.',
       );
+      expect(generalError.isSuccess, isFalse);
+      expect(generalError.isError, isTrue);
       expect(
         wrongUsage.exitDescription,
         'The command line usage is incorrect.',
