@@ -40,15 +40,26 @@ void main() {
 
     test('Check ExitCodeExtension', () {
       expect(success.exitDescription, 'The operation was successful.');
+      expect(success.isSuccess, isTrue);
+      expect(success.isError, isFalse);
+
       expect(
         generalError.exitDescription,
         'An error that occurred during the operation.',
       );
+      expect(generalError.isSuccess, isFalse);
+      expect(generalError.isError, isTrue);
+
       expect(
         wrongUsage.exitDescription,
         'The command line usage is incorrect.',
       );
+      expect(wrongUsage.isSuccess, isFalse);
+      expect(wrongUsage.isError, isTrue);
+
       expect(999.exitDescription, 'Unknown exit code: 999');
+      expect(999.isSuccess, isFalse);
+      expect(999.isError, isTrue);
     });
   });
 }
