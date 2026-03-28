@@ -49,6 +49,15 @@ void main() {
         'The command line usage is incorrect.',
       );
       expect(999.exitDescription, 'Unknown exit code: 999');
+
+      expect(success.isSuccess, isTrue);
+      expect(success.isError, isFalse);
+
+      expect(generalError.isSuccess, isFalse);
+      expect(generalError.isError, isTrue);
+
+      expect(999.isSuccess, isFalse);
+      expect(999.isError, isTrue);
     });
   });
 }
