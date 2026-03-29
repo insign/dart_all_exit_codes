@@ -50,5 +50,16 @@ void main() {
       );
       expect(999.exitDescription, 'Unknown exit code: 999');
     });
+
+    test('Check isSuccess and isError getters', () {
+      expect(success.isSuccess, isTrue);
+      expect(success.isError, isFalse);
+
+      expect(generalError.isSuccess, isFalse);
+      expect(generalError.isError, isTrue);
+
+      expect(wrongUsage.isSuccess, isFalse);
+      expect(wrongUsage.isError, isTrue);
+    });
   });
 }
