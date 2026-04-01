@@ -105,4 +105,8 @@ const Map<int, String> exitCodeDescriptions = {
 extension ExitCodeExtension on int {
   String get exitDescription =>
       exitCodeDescriptions[this] ?? 'Unknown exit code: $this';
+
+  bool get isSuccess => this == success;
+
+  bool get isError => this != success;
 }
