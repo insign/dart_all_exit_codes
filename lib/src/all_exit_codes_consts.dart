@@ -1,3 +1,5 @@
+import 'dart:io';
+
 /// 0 - Success - The operation was successful.
 const int success = 0;
 
@@ -133,4 +135,19 @@ extension ExitCodeExtension on int {
   bool get isSuccess => this == success;
 
   bool get isError => this != success;
+
+  /// Exits the process with this exit code.
+  ///
+  /// If [message] is provided, it is printed to stdout if the exit code is
+  /// [success], or to stderr if the exit code is an error.
+  /// If [message] is not provided, the [exitDescription] is printed instead.
+  Never exitProcess([String? message]) {
+    final msg = message ?? exitDescription;
+    if (isError) {
+      stderr.writeln(msg);
+    } else {
+      stdout.writeln(msg);
+    }
+    exit(this);
+  }
 }

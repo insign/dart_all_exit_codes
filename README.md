@@ -11,8 +11,8 @@ dart pub add all_exit_codes
 import 'package:all_exit_codes/all_exit_codes.dart';
 
 Never main() {
-  print('Maybe you are using this command wrong. Check the usage.');
-  exit(wrongUsage);
+  // Gracefully log to stderr and exit with code 64
+  wrongUsage.exitProcess('Maybe you are using this command wrong. Check the usage.');
 }
 ```
 
