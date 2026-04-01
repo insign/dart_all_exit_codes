@@ -1,10 +1,36 @@
+import 'dart:io';
 import 'package:all_exit_codes/all_exit_codes.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('A group of tests', () {
     setUp(() {
-      // Additional setup goes here.
+      final dir = Directory('test/temp');
+      if (!dir.existsSync()) {
+        dir.createSync();
+      }
+      File('test/temp/test_script.dart').writeAsStringSync('''
+import 'package:all_exit_codes/all_exit_codes.dart';
+
+void main(List<String> args) {
+  final isError = args[0] == 'error';
+  final hasMessage = args[1] == 'true';
+  final message = hasMessage ? 'Custom message' : null;
+
+  if (isError) {
+    wrongUsage.exitProcess(message);
+  } else {
+    success.exitProcess(message);
+  }
+}
+''');
+    });
+
+    tearDownAll(() {
+      final dir = Directory('test/temp');
+      if (dir.existsSync()) {
+        dir.deleteSync(recursive: true);
+      }
     });
 
     test('Check some codes', () {
@@ -82,6 +108,41 @@ void main() {
 
       expect(999.isSuccess, isFalse);
       expect(999.isError, isTrue);
+    });
+
+    test('Check exitProcess extension with custom message on error', () async {
+      final result = await Process.run(
+          'dart', ['run', 'test/temp/test_script.dart', 'error', 'true']);
+      expect(result.exitCode, wrongUsage);
+      expect(result.stdout.toString().trim(), isEmpty);
+      expect(result.stderr.toString().trim(), 'Custom message');
+    });
+
+    test('Check exitProcess extension with default message on error', () async {
+      final result = await Process.run(
+          'dart', ['run', 'test/temp/test_script.dart', 'error', 'false']);
+      expect(result.exitCode, wrongUsage);
+      expect(result.stdout.toString().trim(), isEmpty);
+      expect(result.stderr.toString().trim(),
+          'The command line usage is incorrect.');
+    });
+
+    test('Check exitProcess extension with custom message on success',
+        () async {
+      final result = await Process.run(
+          'dart', ['run', 'test/temp/test_script.dart', 'success', 'true']);
+      expect(result.exitCode, success);
+      expect(result.stderr.toString().trim(), isEmpty);
+      expect(result.stdout.toString().trim(), 'Custom message');
+    });
+
+    test('Check exitProcess extension with default message on success',
+        () async {
+      final result = await Process.run(
+          'dart', ['run', 'test/temp/test_script.dart', 'success', 'false']);
+      expect(result.exitCode, success);
+      expect(result.stderr.toString().trim(), isEmpty);
+      expect(result.stdout.toString().trim(), 'The operation was successful.');
     });
   });
 }
