@@ -4,7 +4,7 @@ const int success = 0;
 /// 1 - GeneralError - An error that occurred during the operation.
 const int generalError = 1;
 
-/// 2 - MisuseOfShellBuiltins - The command line usage is incorrect.
+/// 2 - MisuseOfShellBuiltins - Misuse of shell builtins.
 const int misuseOfShellBuiltins = 2;
 
 /// 20 - NotADirectory - The specified path is not a directory.
@@ -17,7 +17,11 @@ const int wrongUsage = 64;
 const int dataError = 65;
 
 /// 66 - UnableToOpenInputFile - The specified input file could not be opened.
+@Deprecated('Use noInput instead')
 const int unableToOpenInputFile = 66;
+
+/// 66 - NoInput - An input file (not a system file) did not exist or was not readable.
+const int noInput = 66;
 
 /// 67 - NoUser - The user specified did not exist.
 const int noUser = 67;
@@ -26,19 +30,39 @@ const int noUser = 67;
 const int noHost = 68;
 
 /// 72 - FileExists - The specified file already exists.
+@Deprecated('Use osFile instead')
 const int fileExists = 72;
 
+/// 72 - OSFile - Some system file does not exist, cannot be opened, or has some sort of error.
+const int osFile = 72;
+
 /// 73 - UnableToCreateTemporaryFile - A temporary file could not be created.
+@Deprecated('Use cantCreate instead')
 const int unableToCreateTemporaryFile = 73;
 
+/// 73 - CantCreate - A (user specified) output file cannot be created.
+const int cantCreate = 73;
+
 /// 69 - UnableToOpenOutputFile - The specified output file could not be opened.
+@Deprecated('Use unavailable instead')
 const int unableToOpenOutputFile = 69;
 
+/// 69 - Unavailable - A service is unavailable.
+const int unavailable = 69;
+
 /// 70 - UnableToOpenOutputFileForWriting - The specified output file could not be opened for writing.
+@Deprecated('Use software instead')
 const int unableToOpenOutputFileForWriting = 70;
 
+/// 70 - Software - An internal software error has been detected.
+const int software = 70;
+
 /// 71 - UnableToOpenOutputFileForReading - The specified output file could not be opened for reading.
+@Deprecated('Use osError instead')
 const int unableToOpenOutputFileForReading = 71;
+
+/// 71 - OSError - An operating system error has been detected.
+const int osError = 71;
 
 /// 74 - IOError - An input/output error occurred.
 const int ioError = 74;
@@ -74,20 +98,20 @@ const int unknown = 255;
 const Map<int, String> exitCodeDescriptions = {
   success: 'The operation was successful.',
   generalError: 'An error that occurred during the operation.',
-  misuseOfShellBuiltins: 'The command line usage is incorrect.',
+  misuseOfShellBuiltins: 'Misuse of shell builtins.',
   notADirectory: 'The specified path is not a directory.',
   wrongUsage: 'The command line usage is incorrect.',
   dataError: 'The input data was incorrect in some way.',
-  unableToOpenInputFile: 'The specified input file could not be opened.',
+  noInput:
+      'An input file (not a system file) did not exist or was not readable.',
   noUser: 'The user specified did not exist.',
   noHost: 'The host specified did not exist.',
-  fileExists: 'The specified file already exists.',
-  unableToCreateTemporaryFile: 'A temporary file could not be created.',
-  unableToOpenOutputFile: 'The specified output file could not be opened.',
-  unableToOpenOutputFileForWriting:
-      'The specified output file could not be opened for writing.',
-  unableToOpenOutputFileForReading:
-      'The specified output file could not be opened for reading.',
+  osFile:
+      'Some system file does not exist, cannot be opened, or has some sort of error.',
+  cantCreate: 'A (user specified) output file cannot be created.',
+  unavailable: 'A service is unavailable.',
+  software: 'An internal software error has been detected.',
+  osError: 'An operating system error has been detected.',
   ioError: 'An input/output error occurred.',
   tryAgain: 'A temporary failure occurred, try again later.',
   protocolError:
