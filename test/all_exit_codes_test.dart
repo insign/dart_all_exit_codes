@@ -144,5 +144,24 @@ void main(List<String> args) {
       expect(result.stderr.toString().trim(), isEmpty);
       expect(result.stdout.toString().trim(), 'The operation was successful.');
     });
+
+    test('Check exitCodeNames map', () {
+      expect(exitCodeNames, isA<Map<int, String>>());
+      expect(exitCodeNames[success], 'success');
+      expect(exitCodeNames[generalError], 'generalError');
+      expect(exitCodeNames[wrongUsage], 'wrongUsage');
+      expect(exitCodeNames[noInput], 'noInput');
+      expect(exitCodeNames[unavailable], 'unavailable');
+      expect(exitCodeNames[software], 'software');
+      expect(exitCodeNames.length, 24);
+    });
+
+    test('Check exitName extension', () {
+      expect(success.exitName, 'success');
+      expect(generalError.exitName, 'generalError');
+      expect(wrongUsage.exitName, 'wrongUsage');
+      expect(noInput.exitName, 'noInput');
+      expect(999.exitName, 'unknown');
+    });
   });
 }

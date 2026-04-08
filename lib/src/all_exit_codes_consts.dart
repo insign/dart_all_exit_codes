@@ -128,9 +128,39 @@ const Map<int, String> exitCodeDescriptions = {
   unknown: 'An unknown exit status occurred.',
 };
 
+/// Map of exit codes to their symbolic names.
+const Map<int, String> exitCodeNames = {
+  success: 'success',
+  generalError: 'generalError',
+  misuseOfShellBuiltins: 'misuseOfShellBuiltins',
+  notADirectory: 'notADirectory',
+  wrongUsage: 'wrongUsage',
+  dataError: 'dataError',
+  noInput: 'noInput',
+  noUser: 'noUser',
+  noHost: 'noHost',
+  osFile: 'osFile',
+  cantCreate: 'cantCreate',
+  unavailable: 'unavailable',
+  software: 'software',
+  osError: 'osError',
+  ioError: 'ioError',
+  tryAgain: 'tryAgain',
+  protocolError: 'protocolError',
+  noPermission: 'noPermission',
+  configurationError: 'configurationError',
+  cantExecute: 'cantExecute',
+  notFound: 'notFound',
+  invalidArgumentToExit: 'invalidArgumentToExit',
+  userTerminated: 'userTerminated',
+  unknown: 'unknown',
+};
+
 extension ExitCodeExtension on int {
   String get exitDescription =>
       exitCodeDescriptions[this] ?? 'Unknown exit code: $this';
+
+  String get exitName => exitCodeNames[this] ?? 'unknown';
 
   bool get isSuccess => this == success;
 
