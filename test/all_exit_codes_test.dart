@@ -85,7 +85,29 @@ void main(List<String> args) {
       expect(exitCodeDescriptions.length, 24);
     });
 
+    test('Check exitCodeNames map', () {
+      expect(exitCodeNames, isA<Map<int, String>>());
+      expect(exitCodeNames[success], 'success');
+      expect(exitCodeNames[generalError], 'generalError');
+      expect(exitCodeNames[misuseOfShellBuiltins], 'misuseOfShellBuiltins');
+      expect(exitCodeNames[wrongUsage], 'wrongUsage');
+      expect(exitCodeNames[noInput], 'noInput');
+      expect(exitCodeNames[unavailable], 'unavailable');
+      expect(exitCodeNames[software], 'software');
+      expect(exitCodeNames[osError], 'osError');
+      expect(exitCodeNames[osFile], 'osFile');
+      expect(exitCodeNames[cantCreate], 'cantCreate');
+      expect(exitCodeNames[dataError], 'dataError');
+      expect(exitCodeNames[noUser], 'noUser');
+      expect(exitCodeNames.length, 24);
+    });
+
     test('Check ExitCodeExtension', () {
+      expect(success.exitName, 'success');
+      expect(generalError.exitName, 'generalError');
+      expect(wrongUsage.exitName, 'wrongUsage');
+      expect(999.exitName, 'unknown');
+
       expect(success.exitDescription, 'The operation was successful.');
       expect(
         generalError.exitDescription,
