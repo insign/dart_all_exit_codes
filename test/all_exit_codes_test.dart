@@ -166,5 +166,39 @@ void main(List<String> args) {
       expect(result.stderr.toString().trim(), isEmpty);
       expect(result.stdout.toString().trim(), 'The operation was successful.');
     });
+
+    test('Check throwExit extension throws ExitException', () {
+      expect(
+        () => wrongUsage.throwExit(),
+        throwsA(isA<ExitException>()
+            .having((e) => e.exitCode, 'exitCode', wrongUsage)
+            .having((e) => e.message, 'message', isNull)
+            .having((e) => e.toString(), 'toString',
+                'ExitException(64): The command line usage is incorrect.')),
+      );
+
+      expect(
+        () => success.throwExit('All good!'),
+        throwsA(isA<ExitException>()
+            .having((e) => e.exitCode, 'exitCode', success)
+            .having((e) => e.message, 'message', 'All good!')
+            .having((e) => e.toString(), 'toString',
+                'ExitException(0): All good!')),
+      );
+    });
+
+    test('Check ExitException toString formats correctly', () {
+      final exceptionWithoutMessage = ExitException(generalError);
+      expect(exceptionWithoutMessage.toString(),
+          'ExitException(1): An error that occurred during the operation.');
+
+      final exceptionWithMessage = ExitException(notADirectory, 'Custom error');
+      expect(exceptionWithMessage.toString(),
+          'ExitException(20): Custom error');
+
+      final exceptionUnknown = ExitException(999);
+      expect(
+          exceptionUnknown.toString(), 'ExitException(999): Unknown exit code: 999');
+    });
   });
 }
