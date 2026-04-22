@@ -180,4 +180,35 @@ extension ExitCodeExtension on int {
     }
     exit(this);
   }
+
+  /// Throws an [ExitException] with this exit code.
+  ///
+  /// This is useful in CLI architectures to bubble up an exit status gracefully
+  /// up the call stack instead of terminating the process immediately with
+  /// [exitProcess], making unit testing much easier.
+  Never throwExit([String? message]) {
+    throw ExitException(this, message);
+  }
+}
+
+/// An exception that wraps an exit code and an optional message.
+///
+/// This exception allows CLI applications to throw an exit status up the
+/// call stack and catch it at the top level to gracefully exit the process,
+/// avoiding hard exits deep within business logic which are difficult to test.
+class ExitException implements Exception {
+  /// The exit code.
+  final int exitCode;
+
+  /// The custom message provided, if any.
+  final String? message;
+
+  /// Creates a new [ExitException].
+  const ExitException(this.exitCode, [this.message]);
+
+  @override
+  String toString() {
+    final msg = message ?? exitCode.exitDescription;
+    return 'ExitException($exitCode): $msg';
+  }
 }
