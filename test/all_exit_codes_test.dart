@@ -15,7 +15,14 @@ import 'package:all_exit_codes/all_exit_codes.dart';
 void main(List<String> args) {
   final isError = args[0] == 'error';
   final hasMessage = args[1] == 'true';
-  final message = hasMessage ? 'Custom message' : null;
+  final isObject = args[1] == 'object';
+
+  Object? message;
+  if (hasMessage) {
+    message = 'Custom message';
+  } else if (isObject) {
+    message = Exception('Object message');
+  }
 
   if (isError) {
     wrongUsage.exitProcess(message);
@@ -140,6 +147,14 @@ void main(List<String> args) {
       expect(result.stderr.toString().trim(), 'Custom message');
     });
 
+    test('Check exitProcess extension with object message on error', () async {
+      final result = await Process.run(
+          'dart', ['run', 'test/temp/test_script.dart', 'error', 'object']);
+      expect(result.exitCode, wrongUsage);
+      expect(result.stdout.toString().trim(), isEmpty);
+      expect(result.stderr.toString().trim(), 'Exception: Object message');
+    });
+
     test('Check exitProcess extension with default message on error', () async {
       final result = await Process.run(
           'dart', ['run', 'test/temp/test_script.dart', 'error', 'false']);
@@ -184,6 +199,18 @@ void main(List<String> args) {
             .having((e) => e.message, 'message', 'All good!')
             .having((e) => e.toString(), 'toString',
                 'ExitException(0): All good!')),
+      );
+    });
+
+    test('Check throwExit extension throws ExitException with object message', () {
+      final exceptionObj = Exception('Object message');
+      expect(
+        () => wrongUsage.throwExit(exceptionObj),
+        throwsA(isA<ExitException>()
+            .having((e) => e.exitCode, 'exitCode', wrongUsage)
+            .having((e) => e.message, 'message', exceptionObj)
+            .having((e) => e.toString(), 'toString',
+                'ExitException(64): Exception: Object message')),
       );
     });
 
