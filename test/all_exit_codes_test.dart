@@ -200,5 +200,17 @@ void main(List<String> args) {
       expect(
           exceptionUnknown.toString(), 'ExitException(999): Unknown exit code: 999');
     });
+
+    test('Check throwExit and ExitException accepts Object as message', () {
+      final customException = Exception('Test Exception');
+      expect(
+        () => wrongUsage.throwExit(customException),
+        throwsA(isA<ExitException>()
+            .having((e) => e.exitCode, 'exitCode', wrongUsage)
+            .having((e) => e.message, 'message', customException)
+            .having((e) => e.toString(), 'toString',
+                'ExitException(64): Exception: Test Exception')),
+      );
+    });
   });
 }
