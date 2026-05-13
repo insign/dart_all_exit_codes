@@ -171,7 +171,7 @@ extension ExitCodeExtension on int {
   /// If [message] is provided, it is printed to stdout if the exit code is
   /// [success], or to stderr if the exit code is an error.
   /// If [message] is not provided, the [exitDescription] is printed instead.
-  Never exitProcess([String? message]) {
+  Never exitProcess([Object? message]) {
     final msg = message ?? exitDescription;
     if (isError) {
       stderr.writeln(msg);
@@ -186,7 +186,7 @@ extension ExitCodeExtension on int {
   /// This is useful in CLI architectures to bubble up an exit status gracefully
   /// up the call stack instead of terminating the process immediately with
   /// [exitProcess], making unit testing much easier.
-  Never throwExit([String? message]) {
+  Never throwExit([Object? message]) {
     throw ExitException(this, message);
   }
 }
@@ -201,7 +201,7 @@ class ExitException implements Exception {
   final int exitCode;
 
   /// The custom message provided, if any.
-  final String? message;
+  final Object? message;
 
   /// Creates a new [ExitException].
   const ExitException(this.exitCode, [this.message]);

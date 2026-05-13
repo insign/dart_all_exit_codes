@@ -199,6 +199,21 @@ void main(List<String> args) {
       final exceptionUnknown = ExitException(999);
       expect(
           exceptionUnknown.toString(), 'ExitException(999): Unknown exit code: 999');
+
+      final exceptionWithObject = ExitException(dataError, Exception('Invalid data'));
+      expect(exceptionWithObject.toString(),
+          'ExitException(65): Exception: Invalid data');
+    });
+
+    test('Check throwExit extension works with Object (Exception)', () {
+      expect(
+        () => software.throwExit(Exception('System failure')),
+        throwsA(isA<ExitException>()
+            .having((e) => e.exitCode, 'exitCode', software)
+            .having((e) => e.message, 'message', isA<Exception>())
+            .having((e) => e.toString(), 'toString',
+                'ExitException(70): Exception: System failure')),
+      );
     });
   });
 }
