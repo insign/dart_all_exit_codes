@@ -24,6 +24,18 @@ void main(List<String> args) {
   }
 }
 ''');
+
+      File('test/temp/test_exception_script.dart').writeAsStringSync('''
+import 'package:all_exit_codes/all_exit_codes.dart';
+
+void main() {
+  try {
+    wrongUsage.throwExit('Caught message');
+  } on ExitException catch (e) {
+    e.exitProcess();
+  }
+}
+''');
     });
 
     tearDownAll(() {
@@ -193,14 +205,15 @@ void main(List<String> args) {
           'ExitException(1): An error that occurred during the operation.');
 
       final exceptionWithMessage = ExitException(notADirectory, 'Custom error');
-      expect(exceptionWithMessage.toString(),
-          'ExitException(20): Custom error');
+      expect(
+          exceptionWithMessage.toString(), 'ExitException(20): Custom error');
 
       final exceptionUnknown = ExitException(999);
-      expect(
-          exceptionUnknown.toString(), 'ExitException(999): Unknown exit code: 999');
+      expect(exceptionUnknown.toString(),
+          'ExitException(999): Unknown exit code: 999');
 
-      final exceptionWithObject = ExitException(dataError, Exception('Invalid data'));
+      final exceptionWithObject =
+          ExitException(dataError, Exception('Invalid data'));
       expect(exceptionWithObject.toString(),
           'ExitException(65): Exception: Invalid data');
     });
@@ -214,6 +227,36 @@ void main(List<String> args) {
             .having((e) => e.toString(), 'toString',
                 'ExitException(70): Exception: System failure')),
       );
+    });
+
+    test('Check throwExit passes stackTrace correctly', () {
+      final trace = StackTrace.fromString('stack_trace_string');
+      expect(
+        () => generalError.throwExit('Message', trace),
+        throwsA(isA<ExitException>()
+            .having((e) => e.exitCode, 'exitCode', generalError)
+            .having((e) => e.message, 'message', 'Message')
+            .having((e) => e.stackTrace, 'stackTrace', trace)),
+      );
+    });
+
+    test('Check ExitException toString formatting with stackTrace', () {
+      final trace = StackTrace.fromString('stack_trace_string');
+      final exceptionWithTrace =
+          ExitException(dataError, 'Error message', trace);
+      expect(
+        exceptionWithTrace.toString(),
+        'ExitException(65): Error message\nstack_trace_string',
+      );
+    });
+
+    test('Check ExitException exitProcess correctly exits the process',
+        () async {
+      final result = await Process.run(
+          'dart', ['run', 'test/temp/test_exception_script.dart']);
+      expect(result.exitCode, wrongUsage);
+      expect(result.stdout.toString().trim(), isEmpty);
+      expect(result.stderr.toString().trim(), 'Caught message');
     });
   });
 }
