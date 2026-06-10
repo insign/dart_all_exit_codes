@@ -186,8 +186,8 @@ extension ExitCodeExtension on int {
   /// This is useful in CLI architectures to bubble up an exit status gracefully
   /// up the call stack instead of terminating the process immediately with
   /// [exitProcess], making unit testing much easier.
-  Never throwExit([Object? message]) {
-    throw ExitException(this, message);
+  Never throwExit([Object? message, StackTrace? stackTrace]) {
+    throw ExitException(this, message, stackTrace);
   }
 }
 
@@ -203,12 +203,20 @@ class ExitException implements Exception {
   /// The custom message provided, if any.
   final Object? message;
 
+  /// The stack trace associated with the exception, if any.
+  final StackTrace? stackTrace;
+
   /// Creates a new [ExitException].
-  const ExitException(this.exitCode, [this.message]);
+  const ExitException(this.exitCode, [this.message, this.stackTrace]);
 
   @override
   String toString() {
     final msg = message ?? exitCode.exitDescription;
     return 'ExitException($exitCode): $msg';
+  }
+
+  /// Exits the process with the [exitCode] and the given [message].
+  Never exitProcess() {
+    exitCode.exitProcess(message);
   }
 }

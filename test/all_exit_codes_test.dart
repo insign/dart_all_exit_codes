@@ -17,7 +17,13 @@ void main(List<String> args) {
   final hasMessage = args[1] == 'true';
   final message = hasMessage ? 'Custom message' : null;
 
-  if (isError) {
+  if (args[0] == 'exception') {
+    try {
+      wrongUsage.throwExit(message, StackTrace.current);
+    } on ExitException catch (e) {
+      e.exitProcess();
+    }
+  } else if (isError) {
     wrongUsage.exitProcess(message);
   } else {
     success.exitProcess(message);
@@ -167,21 +173,31 @@ void main(List<String> args) {
       expect(result.stdout.toString().trim(), 'The operation was successful.');
     });
 
+    test('Check ExitException.exitProcess() via test script', () async {
+      final result = await Process.run(
+          'dart', ['run', 'test/temp/test_script.dart', 'exception', 'true']);
+      expect(result.exitCode, wrongUsage);
+      expect(result.stdout.toString().trim(), isEmpty);
+      expect(result.stderr.toString().trim(), 'Custom message');
+    });
+
     test('Check throwExit extension throws ExitException', () {
       expect(
         () => wrongUsage.throwExit(),
         throwsA(isA<ExitException>()
             .having((e) => e.exitCode, 'exitCode', wrongUsage)
             .having((e) => e.message, 'message', isNull)
+            .having((e) => e.stackTrace, 'stackTrace', isNull)
             .having((e) => e.toString(), 'toString',
                 'ExitException(64): The command line usage is incorrect.')),
       );
 
       expect(
-        () => success.throwExit('All good!'),
+        () => success.throwExit('All good!', StackTrace.empty),
         throwsA(isA<ExitException>()
             .having((e) => e.exitCode, 'exitCode', success)
             .having((e) => e.message, 'message', 'All good!')
+            .having((e) => e.stackTrace, 'stackTrace', StackTrace.empty)
             .having((e) => e.toString(), 'toString',
                 'ExitException(0): All good!')),
       );
@@ -193,14 +209,15 @@ void main(List<String> args) {
           'ExitException(1): An error that occurred during the operation.');
 
       final exceptionWithMessage = ExitException(notADirectory, 'Custom error');
-      expect(exceptionWithMessage.toString(),
-          'ExitException(20): Custom error');
+      expect(
+          exceptionWithMessage.toString(), 'ExitException(20): Custom error');
 
       final exceptionUnknown = ExitException(999);
-      expect(
-          exceptionUnknown.toString(), 'ExitException(999): Unknown exit code: 999');
+      expect(exceptionUnknown.toString(),
+          'ExitException(999): Unknown exit code: 999');
 
-      final exceptionWithObject = ExitException(dataError, Exception('Invalid data'));
+      final exceptionWithObject =
+          ExitException(dataError, Exception('Invalid data'));
       expect(exceptionWithObject.toString(),
           'ExitException(65): Exception: Invalid data');
     });
