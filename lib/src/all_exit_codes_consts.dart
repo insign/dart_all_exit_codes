@@ -187,7 +187,11 @@ extension ExitCodeExtension on int {
   /// up the call stack instead of terminating the process immediately with
   /// [exitProcess], making unit testing much easier.
   Never throwExit([Object? message, StackTrace? stackTrace]) {
-    throw ExitException(this, message, stackTrace);
+    final exception = ExitException(this, message, stackTrace);
+    if (stackTrace != null) {
+      Error.throwWithStackTrace(exception, stackTrace);
+    }
+    throw exception;
   }
 }
 
