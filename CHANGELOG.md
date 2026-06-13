@@ -1,3 +1,7 @@
+## v2.3.1
+- feat: add StackTrace support and `exitProcess()` to ExitException
+- chore: add release notes for automated pub.dev publishing
+
 ## v2.2.0
 - release
 ## v2.1.5
