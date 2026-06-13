@@ -17,7 +17,13 @@ void main(List<String> args) {
   final hasMessage = args[1] == 'true';
   final message = hasMessage ? 'Custom message' : null;
 
-  if (isError) {
+  if (args[0] == 'exception') {
+    try {
+      wrongUsage.throwExit(message, StackTrace.current);
+    } on ExitException catch (e) {
+      e.exitProcess();
+    }
+  } else if (isError) {
     wrongUsage.exitProcess(message);
   } else {
     success.exitProcess(message);
@@ -66,17 +72,27 @@ void main(List<String> args) {
         exitCodeDescriptions[wrongUsage],
         'The command line usage is incorrect.',
       );
-      expect(exitCodeDescriptions[noInput],
-          'An input file (not a system file) did not exist or was not readable.');
+      expect(
+        exitCodeDescriptions[noInput],
+        'An input file (not a system file) did not exist or was not readable.',
+      );
       expect(exitCodeDescriptions[unavailable], 'A service is unavailable.');
-      expect(exitCodeDescriptions[software],
-          'An internal software error has been detected.');
-      expect(exitCodeDescriptions[osError],
-          'An operating system error has been detected.');
-      expect(exitCodeDescriptions[osFile],
-          'Some system file does not exist, cannot be opened, or has some sort of error.');
-      expect(exitCodeDescriptions[cantCreate],
-          'A (user specified) output file cannot be created.');
+      expect(
+        exitCodeDescriptions[software],
+        'An internal software error has been detected.',
+      );
+      expect(
+        exitCodeDescriptions[osError],
+        'An operating system error has been detected.',
+      );
+      expect(
+        exitCodeDescriptions[osFile],
+        'Some system file does not exist, cannot be opened, or has some sort of error.',
+      );
+      expect(
+        exitCodeDescriptions[cantCreate],
+        'A (user specified) output file cannot be created.',
+      );
       expect(
         exitCodeDescriptions[dataError],
         'The input data was incorrect in some way.',
@@ -133,86 +149,176 @@ void main(List<String> args) {
     });
 
     test('Check exitProcess extension with custom message on error', () async {
-      final result = await Process.run(
-          'dart', ['run', 'test/temp/test_script.dart', 'error', 'true']);
+      final result = await Process.run('dart', [
+        'run',
+        'test/temp/test_script.dart',
+        'error',
+        'true',
+      ]);
       expect(result.exitCode, wrongUsage);
       expect(result.stdout.toString().trim(), isEmpty);
       expect(result.stderr.toString().trim(), 'Custom message');
     });
 
     test('Check exitProcess extension with default message on error', () async {
-      final result = await Process.run(
-          'dart', ['run', 'test/temp/test_script.dart', 'error', 'false']);
+      final result = await Process.run('dart', [
+        'run',
+        'test/temp/test_script.dart',
+        'error',
+        'false',
+      ]);
       expect(result.exitCode, wrongUsage);
       expect(result.stdout.toString().trim(), isEmpty);
-      expect(result.stderr.toString().trim(),
-          'The command line usage is incorrect.');
+      expect(
+        result.stderr.toString().trim(),
+        'The command line usage is incorrect.',
+      );
     });
 
-    test('Check exitProcess extension with custom message on success',
-        () async {
-      final result = await Process.run(
-          'dart', ['run', 'test/temp/test_script.dart', 'success', 'true']);
-      expect(result.exitCode, success);
-      expect(result.stderr.toString().trim(), isEmpty);
-      expect(result.stdout.toString().trim(), 'Custom message');
-    });
+    test(
+      'Check exitProcess extension with custom message on success',
+      () async {
+        final result = await Process.run('dart', [
+          'run',
+          'test/temp/test_script.dart',
+          'success',
+          'true',
+        ]);
+        expect(result.exitCode, success);
+        expect(result.stderr.toString().trim(), isEmpty);
+        expect(result.stdout.toString().trim(), 'Custom message');
+      },
+    );
 
-    test('Check exitProcess extension with default message on success',
-        () async {
-      final result = await Process.run(
-          'dart', ['run', 'test/temp/test_script.dart', 'success', 'false']);
-      expect(result.exitCode, success);
-      expect(result.stderr.toString().trim(), isEmpty);
-      expect(result.stdout.toString().trim(), 'The operation was successful.');
+    test(
+      'Check exitProcess extension with default message on success',
+      () async {
+        final result = await Process.run('dart', [
+          'run',
+          'test/temp/test_script.dart',
+          'success',
+          'false',
+        ]);
+        expect(result.exitCode, success);
+        expect(result.stderr.toString().trim(), isEmpty);
+        expect(
+          result.stdout.toString().trim(),
+          'The operation was successful.',
+        );
+      },
+    );
+
+    test('Check ExitException.exitProcess() via test script', () async {
+      final result = await Process.run('dart', [
+        'run',
+        'test/temp/test_script.dart',
+        'exception',
+        'true',
+      ]);
+      expect(result.exitCode, wrongUsage);
+      expect(result.stdout.toString().trim(), isEmpty);
+      expect(result.stderr.toString().trim(), 'Custom message');
     });
 
     test('Check throwExit extension throws ExitException', () {
       expect(
         () => wrongUsage.throwExit(),
-        throwsA(isA<ExitException>()
-            .having((e) => e.exitCode, 'exitCode', wrongUsage)
-            .having((e) => e.message, 'message', isNull)
-            .having((e) => e.toString(), 'toString',
-                'ExitException(64): The command line usage is incorrect.')),
+        throwsA(
+          isA<ExitException>()
+              .having((e) => e.exitCode, 'exitCode', wrongUsage)
+              .having((e) => e.message, 'message', isNull)
+              .having((e) => e.stackTrace, 'stackTrace', isNull)
+              .having(
+                (e) => e.toString(),
+                'toString',
+                'ExitException(64): The command line usage is incorrect.',
+              ),
+        ),
       );
 
       expect(
         () => success.throwExit('All good!'),
-        throwsA(isA<ExitException>()
-            .having((e) => e.exitCode, 'exitCode', success)
-            .having((e) => e.message, 'message', 'All good!')
-            .having((e) => e.toString(), 'toString',
-                'ExitException(0): All good!')),
+        throwsA(
+          isA<ExitException>()
+              .having((e) => e.exitCode, 'exitCode', success)
+              .having((e) => e.message, 'message', 'All good!')
+              .having((e) => e.stackTrace, 'stackTrace', isNull)
+              .having(
+                (e) => e.toString(),
+                'toString',
+                'ExitException(0): All good!',
+              ),
+        ),
       );
+
+      expect(
+        () => success.throwExit('All good!', StackTrace.empty),
+        throwsA(
+          isA<ExitException>()
+              .having((e) => e.exitCode, 'exitCode', success)
+              .having((e) => e.message, 'message', 'All good!')
+              .having((e) => e.stackTrace, 'stackTrace', StackTrace.empty)
+              .having(
+                (e) => e.toString(),
+                'toString',
+                'ExitException(0): All good!',
+              ),
+        ),
+      );
+    });
+
+    test('Check throwExit uses provided StackTrace when throwing', () {
+      final stackTrace = StackTrace.current;
+      try {
+        success.throwExit('All good!', stackTrace);
+      } on ExitException catch (exception, caughtStackTrace) {
+        expect(exception.stackTrace, stackTrace);
+        expect(caughtStackTrace.toString(), stackTrace.toString());
+      }
     });
 
     test('Check ExitException toString formats correctly', () {
       final exceptionWithoutMessage = ExitException(generalError);
-      expect(exceptionWithoutMessage.toString(),
-          'ExitException(1): An error that occurred during the operation.');
+      expect(
+        exceptionWithoutMessage.toString(),
+        'ExitException(1): An error that occurred during the operation.',
+      );
 
       final exceptionWithMessage = ExitException(notADirectory, 'Custom error');
-      expect(exceptionWithMessage.toString(),
-          'ExitException(20): Custom error');
+      expect(
+        exceptionWithMessage.toString(),
+        'ExitException(20): Custom error',
+      );
 
       final exceptionUnknown = ExitException(999);
       expect(
-          exceptionUnknown.toString(), 'ExitException(999): Unknown exit code: 999');
+        exceptionUnknown.toString(),
+        'ExitException(999): Unknown exit code: 999',
+      );
 
-      final exceptionWithObject = ExitException(dataError, Exception('Invalid data'));
-      expect(exceptionWithObject.toString(),
-          'ExitException(65): Exception: Invalid data');
+      final exceptionWithObject = ExitException(
+        dataError,
+        Exception('Invalid data'),
+      );
+      expect(
+        exceptionWithObject.toString(),
+        'ExitException(65): Exception: Invalid data',
+      );
     });
 
     test('Check throwExit extension works with Object (Exception)', () {
       expect(
         () => software.throwExit(Exception('System failure')),
-        throwsA(isA<ExitException>()
-            .having((e) => e.exitCode, 'exitCode', software)
-            .having((e) => e.message, 'message', isA<Exception>())
-            .having((e) => e.toString(), 'toString',
-                'ExitException(70): Exception: System failure')),
+        throwsA(
+          isA<ExitException>()
+              .having((e) => e.exitCode, 'exitCode', software)
+              .having((e) => e.message, 'message', isA<Exception>())
+              .having(
+                (e) => e.toString(),
+                'toString',
+                'ExitException(70): Exception: System failure',
+              ),
+        ),
       );
     });
   });
