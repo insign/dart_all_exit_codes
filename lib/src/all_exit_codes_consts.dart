@@ -181,6 +181,25 @@ extension ExitCodeExtension on int {
     exit(this);
   }
 
+  /// Sets the dart:io [exitCode] variable to this exit code and optionally logs a message.
+  ///
+  /// This is useful when you want to signal an exit status but allow the current
+  /// function to finish, or to allow graceful teardown and unflushed IO streams
+  /// to complete before the Dart VM naturally exits.
+  ///
+  /// If [message] is provided, it is printed to stdout if the exit code is
+  /// [success], or to stderr if the exit code is an error.
+  /// If [message] is not provided, the [exitDescription] is printed instead.
+  void setExitCode([Object? message]) {
+    final msg = message ?? exitDescription;
+    if (isError) {
+      stderr.writeln(msg);
+    } else {
+      stdout.writeln(msg);
+    }
+    exitCode = this;
+  }
+
   /// Throws an [ExitException] with this exit code.
   ///
   /// This is useful in CLI architectures to bubble up an exit status gracefully
@@ -222,5 +241,10 @@ class ExitException implements Exception {
   /// Exits the process with the [exitCode] and the given [message].
   Never exitProcess() {
     exitCode.exitProcess(message);
+  }
+
+  /// Sets the dart:io [exitCode] variable to the [exitCode] and the given [message].
+  void setExitCode() {
+    exitCode.setExitCode(message);
   }
 }
