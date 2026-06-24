@@ -181,6 +181,25 @@ extension ExitCodeExtension on int {
     exit(this);
   }
 
+  /// Sets the global [exitCode] property and logs the message.
+  ///
+  /// This is a graceful alternative to [exitProcess] that allows Dart's
+  /// event loop to naturally empty and perform resource teardowns before
+  /// exiting.
+  ///
+  /// If [message] is provided, it is printed to stdout if the exit code is
+  /// [success], or to stderr if the exit code is an error.
+  /// If [message] is not provided, the [exitDescription] is printed instead.
+  void setExitCode([Object? message]) {
+    final msg = message ?? exitDescription;
+    if (isError) {
+      stderr.writeln(msg);
+    } else {
+      stdout.writeln(msg);
+    }
+    exitCode = this;
+  }
+
   /// Throws an [ExitException] with this exit code.
   ///
   /// This is useful in CLI architectures to bubble up an exit status gracefully
@@ -222,5 +241,13 @@ class ExitException implements Exception {
   /// Exits the process with the [exitCode] and the given [message].
   Never exitProcess() {
     exitCode.exitProcess(message);
+  }
+
+  /// Sets the global [exitCode] property and logs the [message].
+  ///
+  /// This is a graceful alternative to [exitProcess] that allows Dart's
+  /// event loop to naturally empty.
+  void setExitCode() {
+    exitCode.setExitCode(message);
   }
 }
