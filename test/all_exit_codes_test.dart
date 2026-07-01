@@ -23,6 +23,16 @@ void main(List<String> args) {
     } on ExitException catch (e) {
       e.exitProcess();
     }
+  } else if (args[0] == 'exception_set') {
+    try {
+      wrongUsage.throwExit(message, StackTrace.current);
+    } on ExitException catch (e) {
+      e.setExitCode();
+    }
+  } else if (args[0] == 'set_exit_code_error') {
+    wrongUsage.setExitCode(message);
+  } else if (args[0] == 'set_exit_code_success') {
+    success.setExitCode(message);
   } else if (isError) {
     wrongUsage.exitProcess(message);
   } else {
@@ -207,6 +217,78 @@ void main(List<String> args) {
         );
       },
     );
+
+    test('Check setExitCode extension with custom message on error', () async {
+      final result = await Process.run('dart', [
+        'run',
+        'test/temp/test_script.dart',
+        'set_exit_code_error',
+        'true',
+      ]);
+      expect(result.exitCode, wrongUsage);
+      expect(result.stdout.toString().trim(), isEmpty);
+      expect(result.stderr.toString().trim(), 'Custom message');
+    });
+
+    test('Check setExitCode extension with default message on error', () async {
+      final result = await Process.run('dart', [
+        'run',
+        'test/temp/test_script.dart',
+        'set_exit_code_error',
+        'false',
+      ]);
+      expect(result.exitCode, wrongUsage);
+      expect(result.stdout.toString().trim(), isEmpty);
+      expect(
+        result.stderr.toString().trim(),
+        'The command line usage is incorrect.',
+      );
+    });
+
+    test(
+      'Check setExitCode extension with custom message on success',
+      () async {
+        final result = await Process.run('dart', [
+          'run',
+          'test/temp/test_script.dart',
+          'set_exit_code_success',
+          'true',
+        ]);
+        expect(result.exitCode, success);
+        expect(result.stderr.toString().trim(), isEmpty);
+        expect(result.stdout.toString().trim(), 'Custom message');
+      },
+    );
+
+    test(
+      'Check setExitCode extension with default message on success',
+      () async {
+        final result = await Process.run('dart', [
+          'run',
+          'test/temp/test_script.dart',
+          'set_exit_code_success',
+          'false',
+        ]);
+        expect(result.exitCode, success);
+        expect(result.stderr.toString().trim(), isEmpty);
+        expect(
+          result.stdout.toString().trim(),
+          'The operation was successful.',
+        );
+      },
+    );
+
+    test('Check ExitException.setExitCode() via test script', () async {
+      final result = await Process.run('dart', [
+        'run',
+        'test/temp/test_script.dart',
+        'exception_set',
+        'true',
+      ]);
+      expect(result.exitCode, wrongUsage);
+      expect(result.stdout.toString().trim(), isEmpty);
+      expect(result.stderr.toString().trim(), 'Custom message');
+    });
 
     test('Check ExitException.exitProcess() via test script', () async {
       final result = await Process.run('dart', [
